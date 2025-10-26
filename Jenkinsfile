@@ -77,7 +77,7 @@ pipeline {
                     script {
                         echo "Azure Login Started"
                         sh '''
-                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
                         az acr login --name $ACR_NAME
                         '''
                     }
@@ -89,7 +89,7 @@ pipeline {
                 script {
                     echo "Docker Image Push to ACR"
                     sh '''
-                    az login --service-principal -u luckyregistryy -p $AZURE_PASSWORD
+                    az login --service-principal --username luckyregistryy --password $AZURE_PASSWORD
                     az acr login --name luckyregistryy
                     docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
                     docker push luckyregistryy.azurecr.io/springbootapp:latest
@@ -103,7 +103,7 @@ pipeline {
                     script {
                         echo "Azure Login to AKS"
                         sh '''
-                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
                         az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
                         '''
                     }
@@ -116,8 +116,8 @@ pipeline {
                     script {
                         echo "Azure Login to AKS"
                         sh '''
-                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
-                        kubectl apply -f k8s/sprinboot-deployment.yaml
+                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
+                        kubectl apply -f k8s/springboot-deployment.yaml
                         '''
                     }
                 }

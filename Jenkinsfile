@@ -6,9 +6,9 @@ pipeline {
     environment {
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
-        TENANT_ID ='d1186aed-2b69-410f-ad80-1dccf583354e'
+        TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
         ACR_NAME = 'luckyregistryy'
-        AZURE_PASSWORD = credentials('acr-credentials')
+        AZ_CRED = credentials('azure-sp-credential')
         ACR_LOGIN_SERVER = 'luckyregistryy.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
         RG              = "demo11"
@@ -71,15 +71,15 @@ pipeline {
                 }
             }
         }
-        stage('Azure Login TO ACR') {
+        stage('Azure Login TO AKS & ACR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
-                        echo "Azure Login Started"
-                        sh '''
-                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
-                        az acr login --name $ACR_NAME
-                        '''
+                          sh '''
+                        az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID
+                        az aks get-credentials --resource-group demo11 --name lucky-aks-cluster11
+                        kubelogin convert-kubeconfig -l azurecli
+                    '''
                     }
                 }
             }
@@ -97,22 +97,22 @@ pipeline {
                 }
             }
         }
-        stage('Azure Login TO AKS') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
-                    script {
-                        echo "Azure Login to AKS"
-                        sh '''
-                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
-                        az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Azure Login TO AKS') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+        //             script {
+        //                 echo "Azure Login to AKS"
+        //                 sh '''
+        //                 az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
+        //                 az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
         stage('Deploy to AKS') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
                         echo "Azure Login to AKS"
                         sh '''

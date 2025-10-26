@@ -89,19 +89,19 @@ pipeline {
                 }
             }
         }
-        // stage('Azure Login TO AKS') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
-        //             script {
-        //                 echo "Azure Login to AKS"
-        //                 sh '''
-        //                 az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
-        //                 az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Azure Login TO AKS') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                    script {
+                        echo "Azure Login to AKS"
+                        sh '''
+                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                        az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
+                        '''
+                    }
+                }
+            }
+        }
         // stage('Deploy to AKS') {
         //     steps {
         //         withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {

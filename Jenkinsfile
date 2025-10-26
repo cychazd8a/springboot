@@ -34,14 +34,15 @@ pipeline {
                 SCANNER_HOME = tool 'SonarQubeScanner'
             }   
             steps {
-                withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
+                withSonarQubeEnv('SonarQube') {
+                    withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
             sh """
             ${SCANNER_HOME}/bin/sonar-scanner \
             -Dsonar.organization=cychazd8a \
             -Dsonar.projectName=springboot \
             -Dsonar.projectKey=cychazd8a_springboot \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.token=${SONAR_TOKEN} \
             -Dsonar.sources=src \
             -Dsonar.java.binaries=target/classes
             """

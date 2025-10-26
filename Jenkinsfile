@@ -64,19 +64,19 @@ pipeline {
                 }
             }
         }
-        // stage('Azure Login TO ACR') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
-        //             script {
-        //                 echo "Azure Login Started"
-        //                 sh '''
-        //                 az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
-        //                 az acr login --name $ACR_NAME
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Azure Login TO ACR') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                    script {
+                        echo "Azure Login Started"
+                        sh '''
+                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENANT_ID
+                        az acr login --name $ACR_NAME
+                        '''
+                    }
+                }
+            }
+        }
         // stage('Docker Push to ACR') {
         //     steps {
         //         script {

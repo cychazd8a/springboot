@@ -88,6 +88,7 @@ pipeline {
                 script {
                     echo "Docker Image Push to ACR"
                     sh '''
+                    docker login luckyregistryy.azurecr.io -u $AZURE_USERNAME -p $AZURE_PASSWORD
                     docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
                     docker push luckyregistryy.azurecr.io/springbootapp:latest
                     '''

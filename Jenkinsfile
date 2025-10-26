@@ -34,13 +34,17 @@ pipeline {
                 SCANNER_HOME = tool 'SonarQubeScanner'
             }   
             steps {
-                withSonarQubeEnv('sonarserver') {
-                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                    -Dsonar.organization=cychazd8a \
-                    -Dsonar.projectName=springbootjavaapp \
-                    -Dsonar.projectKey=springbootjavaapp \
-                    -Dsonar.java.binaries=.
-                  '''
+                withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
+            sh """
+            ${SCANNER_HOME}/bin/sonar-scanner \
+            -Dsonar.organization=cychazd8a \
+            -Dsonar.projectName=springbootjavaapp \
+            -Dsonar.projectKey=springbootjavaapp \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.sources=src \
+            -Dsonar.java.binaries=target/classes
+            """
                 }
             }         
         }

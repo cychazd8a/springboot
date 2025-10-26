@@ -72,7 +72,7 @@ pipeline {
         }
         stage('Azure Login TO ACR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
                         echo "Azure Login Started"
                         sh '''
@@ -88,9 +88,8 @@ pipeline {
                 script {
                     echo "Docker Image Push to ACR"
                     sh '''
-                    docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}
-                   
-                    docker push ${FULL_IMAGE_NAME}
+                    docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
+                    docker push luckyregistryy.azurecr.io/springbootapp:latest
                     '''
                 }
             }

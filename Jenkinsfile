@@ -6,56 +6,56 @@ pipeline {
     environment{
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
-        TENANT_ID ='ec78375d-0db0-42cf-82a6-2e6403e95936'
-        ACR_NAME = 'springbootdockerreg'
-        ACR_LOGIN_SERVER = 'springbootdockerreg.azurecr.io'
+        TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
+        ACR_NAME = 'luckyregistryy'
+        ACR_LOGIN_SERVER = 'luckyregistryy.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
-        RG              = "socgen"
-        NAME            = "myAKSCluster"
+        RG              = "demo11"
+        NAME            = "lucky-aks-cluster11"
     }
     stages {
         stage('Checkout FROM GIT') {
             steps {
-                git branch: 'prod' , url: 'https://github.com/bkrrajmali/enahanced-petclinc-springboot.git'
+                git branch: 'prod' , url: 'https://github.com/cychazd8a/springboot.git'
         }
       }
-        // stage('Validate with Maven ') {
-        //     steps {
-        //         sh 'mvn validate'
-        //     }
-        // }
-        // stage('Compile with Maven ') {
-        //     steps {
-        //         sh 'mvn compile'
-        //     }
-        // }
-        // stage('Sonar Analysis ') {
-        //     environment {
-        //         SCANNER_HOME = tool 'Sonar-scanner'
-        //     }   
-        //     steps {
-        //         withSonarQubeEnv('sonarserver') {
-        //             sh '''${SCANNER_HOME}/bin/sonar-scanner \
-        //             -Dsonar.organization=bkrrajmali \
-        //             -Dsonar.projectName=springbootjavaapp \
-        //             -Dsonar.projectKey=springbootjavaapp \
-        //             -Dsonar.java.binaries=.
-        //           '''
-        //         }
-        //     }         
-        // }
+        stage('Validate with Maven ') {
+            steps {
+                sh 'mvn validate'
+            }
+        }
+        stage('Compile with Maven ') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('Sonar Analysis ') {
+            environment {
+                SCANNER_HOME = tool 'SonarQubeScanner'
+            }   
+            steps {
+                withSonarQubeEnv('sonarserver') {
+                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.organization=cychazd8a \
+                    -Dsonar.projectName=springbootjavaapp \
+                    -Dsonar.projectKey=springbootjavaapp \
+                    -Dsonar.java.binaries=.
+                  '''
+                }
+            }         
+        }
          stage('Maven Package ') {
             steps {
                 sh 'mvn package'
             }
         }
-        // stage('Sonar Quality Gate') {
-        //     steps {
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonar'
-        //         }
-        //     }
-        // }
+        stage('Sonar Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonar'
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {

@@ -29,21 +29,21 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-        // stage('Sonar Analysis ') {
-        //     environment {
-        //         SCANNER_HOME = tool 'SonarQubeScanner'
-        //     }   
-        //     steps {
-        //         withSonarQubeEnv('sonarserver') {
-        //             sh '''${SCANNER_HOME}/bin/sonar-scanner \
-        //             -Dsonar.organization=cychazd8a \
-        //             -Dsonar.projectName=springbootjavaapp \
-        //             -Dsonar.projectKey=springbootjavaapp \
-        //             -Dsonar.java.binaries=.
-        //           '''
-        //         }
-        //     }         
-        // }
+        stage('Sonar Analysis ') {
+            environment {
+                SCANNER_HOME = tool 'SonarQubeScanner'
+            }   
+            steps {
+                withSonarQubeEnv('sonarserver') {
+                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.organization=cychazd8a \
+                    -Dsonar.projectName=springbootjavaapp \
+                    -Dsonar.projectKey=springbootjavaapp \
+                    -Dsonar.java.binaries=.
+                  '''
+                }
+            }         
+        }
         //  stage('Maven Package ') {
         //     steps {
         //         sh 'mvn package'

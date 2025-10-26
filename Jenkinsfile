@@ -66,7 +66,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker Image......."
-                    docker.build ("${IMAGE_NAME}:${IMAGE_TAG}") 
+                    docker.build ("springbootapp:latest") 
                 }
             }
         }

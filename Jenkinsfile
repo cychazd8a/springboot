@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven 'maven'
     }
-    environment{
+    environment {
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
         TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
@@ -37,15 +37,16 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
             sh """
-            ${SCANNER_HOME}/bin/sonar-scanner \
-            -Dsonar.organization=cychazd8a \
-            -Dsonar.projectName=springboot \
-            -Dsonar.projectKey=cychazd8a_springboot \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token=${SONAR_TOKEN} \
-            -Dsonar.sources=src \
-            -Dsonar.java.binaries=target/classes
+                ${SCANNER_HOME}/bin/sonar-scanner \
+                -Dsonar.organization=cychazd8a \
+                -Dsonar.projectName=springboot \
+                -Dsonar.projectKey=cychazd8a_springboot \
+                -Dsonar.host.url=https://sonarcloud.io \
+                -Dsonar.token=${SONAR_TOKEN} \
+                -Dsonar.sources=src \
+                -Dsonar.java.binaries=target/classes
             """
+                   }
                 }
             }         
         }

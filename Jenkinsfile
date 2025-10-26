@@ -71,32 +71,32 @@ pipeline {
                 }
             }
         }
-        stage('Azure Login TO ACR') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
-                    script {
-                        echo "Azure Login Started"
-                        sh '''
-                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
-                        az acr login --name $ACR_NAME
-                        '''
-                    }
-                }
-            }
-        }
-        stage('Docker Push to ACR') {
-            steps {
-                script {
-                    echo "Docker Image Push to ACR"
-                    sh '''
-                    az login --service-principal --username luckyregistryy --password $AZURE_PASSWORD
-                    az acr login --name luckyregistryy
-                    docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
-                    docker push luckyregistryy.azurecr.io/springbootapp:latest
-                    '''
-                }
-            }
-        }
+        // stage('Azure Login TO ACR') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+        //             script {
+        //                 echo "Azure Login Started"
+        //                 sh '''
+        //                 az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
+        //                 az acr login --name $ACR_NAME
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Docker Push to ACR') {
+        //     steps {
+        //         script {
+        //             echo "Docker Image Push to ACR"
+        //             sh '''
+        //             az login --service-principal --username luckyregistryy --password $AZURE_PASSWORD
+        //             az acr login --name luckyregistryy
+        //             docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
+        //             docker push luckyregistryy.azurecr.io/springbootapp:latest
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Azure Login TO AKS') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {

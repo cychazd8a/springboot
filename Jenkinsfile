@@ -38,8 +38,8 @@ pipeline {
             sh """
             ${SCANNER_HOME}/bin/sonar-scanner \
             -Dsonar.organization=cychazd8a \
-            -Dsonar.projectName=springbootjavaapp \
-            -Dsonar.projectKey=springbootjavaapp \
+            -Dsonar.projectName=springboot \
+            -Dsonar.projectKey=cychazd8a_springboot \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${SONAR_TOKEN} \
             -Dsonar.sources=src \

@@ -6,7 +6,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
-        TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
+        TENANT_ID ='26273608-04e6-431e-9453-cd57864e8ab4'
         ACR_NAME = 'luckyregistryy'
         AZURE_PASSWORD = credentials('acr-credentials')
         ACR_LOGIN_SERVER = 'luckyregistryy.azurecr.io'

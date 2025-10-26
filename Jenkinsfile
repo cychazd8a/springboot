@@ -6,7 +6,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
-        TENANT_ID ='d1186aed-2b69-410f-ad80-1dccf583354e'
+        TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
         ACR_NAME = 'luckyregistryy'
         ACR_LOGIN_SERVER = 'luckyregistryy.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
@@ -96,7 +96,7 @@ pipeline {
         }
         stage('Azure Login TO AKS') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
                         echo "Azure Login to AKS"
                         sh '''

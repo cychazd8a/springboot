@@ -56,14 +56,14 @@ pipeline {
                 }
             }
         }
-        // stage('Docker Build') {
-        //     steps {
-        //         script {
-        //             echo "Building Docker Image......."
-        //             docker.build ("${IMAGE_NAME}:${IMAGE_TAG}") 
-        //         }
-        //     }
-        // }
+        stage('Docker Build') {
+            steps {
+                script {
+                    echo "Building Docker Image......."
+                    docker.build ("${IMAGE_NAME}:${IMAGE_TAG}") 
+                }
+            }
+        }
         // stage('Azure Login TO ACR') {
         //     steps {
         //         withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {

@@ -115,7 +115,7 @@ pipeline {
                     script {
                         echo "Azure Login to AKS"
                         sh '''
-                        az login --service-principal --username $AZURE_USERNAME --password $CLIENT_SECRET --tenant $TENANT_ID
+                        az login --service-principal --username $APP_ID --password $CLIENT_SECRET --tenant $TENANT_ID
                         kubectl apply -f k8s/sprinboot-deployment.yaml
                         '''
                     }

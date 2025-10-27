@@ -7,7 +7,7 @@ pipeline {
         IMAGE_NAME = 'springbootapp'
         IMAGE_TAG = 'latest'
         TENANT_ID ='a8a56f91-3372-425b-b231-74962efba888'
-        ACR_NAME = 'luckyregistryy'
+        APP_ID = 'luckyregistryy'
         AZ_CRED = credentials('azure-sp-credential')
         ACR_LOGIN_SERVER = 'luckyregistryy.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
@@ -89,7 +89,7 @@ pipeline {
                 script {
                     echo "Docker Image Push to ACR"
                     sh '''
-                    az login --service-principal --username luckyregistryy --password $AZURE_PASSWORD
+                    az login --service-principal --username APP_ID --password AZ_CRED --tenant TENANT_ID
                     az acr login --name luckyregistryy
                     docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
                     docker push luckyregistryy.azurecr.io/springbootapp:latest

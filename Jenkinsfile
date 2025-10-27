@@ -89,7 +89,7 @@ pipeline {
                 script {
                     echo "Docker Image Push to ACR"
                     sh '''
-                    az login --service-principal --username APP_ID --password AZ_CRED --tenant TENANT_ID
+                    az login --service-principal --username $APP_ID --password $AZ_CRED --tenant $TENANT_ID
                     az acr login --name luckyregistryy
                     docker tag springbootapp:latest luckyregistryy.azurecr.io/springbootapp:latest
                     docker push luckyregistryy.azurecr.io/springbootapp:latest
@@ -116,7 +116,7 @@ pipeline {
                     script {
                         echo "Azure Login to AKS"
                         sh '''
-                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
+                        az login --service-principal --username $AZURE_USERNAME --password $AZ_CRED --tenant $TENANT_ID
                         kubectl apply -f k8s/sprinboot-deployment.yaml
                         '''
                     }

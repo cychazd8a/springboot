@@ -30,32 +30,32 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-        stage('Sonar Analysis ') {
-            environment {
-                SCANNER_HOME = tool 'SonarQubeScanner'
-            }   
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
-            sh """
-                ${SCANNER_HOME}/bin/sonar-scanner \
-                -Dsonar.organization=cychazd8a \
-                -Dsonar.projectName=springboot \
-                -Dsonar.projectKey=cychazd8a_springboot \
-                -Dsonar.host.url=https://sonarcloud.io \
-                -Dsonar.token=${SONAR_TOKEN} \
-                -Dsonar.sources=src \
-                -Dsonar.java.binaries=target/classes
-            """
-                   }
-                }
-            }         
-        }
-         stage('Maven Package ') {
-            steps {
-                sh 'mvn package'
-            }
-        }
+        // stage('Sonar Analysis ') {
+        //     environment {
+        //         SCANNER_HOME = tool 'SonarQubeScanner'
+        //     }   
+        //     steps {
+        //         withSonarQubeEnv('SonarQube') {
+        //             withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
+        //     sh """
+        //         ${SCANNER_HOME}/bin/sonar-scanner \
+        //         -Dsonar.organization=cychazd8a \
+        //         -Dsonar.projectName=springboot \
+        //         -Dsonar.projectKey=cychazd8a_springboot \
+        //         -Dsonar.host.url=https://sonarcloud.io \
+        //         -Dsonar.token=${SONAR_TOKEN} \
+        //         -Dsonar.sources=src \
+        //         -Dsonar.java.binaries=target/classes
+        //     """
+        //            }
+        //         }
+        //     }         
+        // }
+        //  stage('Maven Package ') {
+        //     steps {
+        //         sh 'mvn package'
+        //     }
+        // }
         // stage('Sonar Quality Gate') {
         //     steps {
         //         timeout(time: 1, unit: 'MINUTES') {

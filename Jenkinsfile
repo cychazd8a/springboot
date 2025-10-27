@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Azure Login TO AKS & ACR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(azureServicePrincipal: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
                           sh '''
                         az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID
@@ -112,12 +112,12 @@ pipeline {
         // }
         stage('Deploy to AKS') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                withCredentials([usernamePassword(azureServicePrincipal: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
                     script {
                         echo "Azure Login to AKS"
                         sh '''
                         az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
-                        kubectl apply -f k8s/springboot-deployment.yaml
+                        kubectl apply -f k8s/sprinboot-deployment.yaml
                         '''
                     }
                 }

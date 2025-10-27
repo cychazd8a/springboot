@@ -30,39 +30,39 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-        // stage('Sonar Analysis ') {
-        //     environment {
-        //         SCANNER_HOME = tool 'SonarQubeScanner'
-        //     }   
-        //     steps {
-        //         withSonarQubeEnv('SonarQube') {
-        //             withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
-        //     sh """
-        //         ${SCANNER_HOME}/bin/sonar-scanner \
-        //         -Dsonar.organization=cychazd8a \
-        //         -Dsonar.projectName=springboot \
-        //         -Dsonar.projectKey=cychazd8a_springboot \
-        //         -Dsonar.host.url=https://sonarcloud.io \
-        //         -Dsonar.token=${SONAR_TOKEN} \
-        //         -Dsonar.sources=src \
-        //         -Dsonar.java.binaries=target/classes
-        //     """
-        //            }
-        //         }
-        //     }         
-        // }
-        //  stage('Maven Package ') {
-        //     steps {
-        //         sh 'mvn package'
-        //     }
-        // }
-        // stage('Sonar Quality Gate') {
-        //     steps {
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonarserver'
-        //         }
-        //     }
-        // }
+        stage('Sonar Analysis ') {
+            environment {
+                SCANNER_HOME = tool 'SonarQubeScanner'
+            }   
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONAR_TOKEN')]) {
+            sh """
+                ${SCANNER_HOME}/bin/sonar-scanner \
+                -Dsonar.organization=cychazd8a \
+                -Dsonar.projectName=springboot \
+                -Dsonar.projectKey=cychazd8a_springboot \
+                -Dsonar.host.url=https://sonarcloud.io \
+                -Dsonar.token=${SONAR_TOKEN} \
+                -Dsonar.sources=src \
+                -Dsonar.java.binaries=target/classes
+            """
+                   }
+                }
+            }         
+        }
+         stage('Maven Package ') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Sonar Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonarserver'
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
@@ -96,19 +96,19 @@ pipeline {
                 }
             }
         }
-        // stage('Azure Login TO AKS') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'acr-credentials', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
-        //             script {
-        //                 echo "Azure Login to AKS"
-        //                 sh '''
-        //                 az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
-        //                 az aks get-credentials --resource-group $RG --name $NAME --overwrite-existing
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Azure Login TO AKS') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {
+                    script {
+                        echo "Azure Login to AKS"
+                        sh '''
+                        az login --service-principal --username $AZURE_USERNAME --password $AZURE_PASSWORD --tenant $TENANT_ID
+                        az aks get-credentials --resource-group $RG --name $NAME
+                        '''
+                    }
+                }
+            }
+        }
         stage('Deploy to AKS') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'azure-acr-spn', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD')]) {

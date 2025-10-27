@@ -71,19 +71,19 @@ pipeline {
                 }
             }
         }
-        stage('Azure Login TO AKS & ACR') {
-            steps {
-                withCredentials([[$class: 'AzureServicePrincipal', azureServicePrincipal: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD']]) {
-                    script {
-                          sh '''
-                        az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID
-                        az aks get-credentials --resource-group demo11 --name lucky-aks-cluster11
-                        kubectl get nodes
-                    '''
-                    }
-                }
-            }
-        }
+        // stage('Azure Login TO AKS & ACR') {
+        //     steps {
+        //         withCredentials([[$class: 'AzureServicePrincipal', azureServicePrincipal: 'azure-sp-credential', usernameVariable: 'AZURE_USERNAME', passwordVariable: 'AZURE_PASSWORD']]) {
+        //             script {
+        //                   sh '''
+        //                 az login --service-principal -u $AZ_CRED_CLIENT_ID -p $AZ_CRED_CLIENT_SECRET -t $AZ_CRED_TENANT_ID
+        //                 az aks get-credentials --resource-group demo11 --name lucky-aks-cluster11
+        //                 kubectl get nodes
+        //             '''
+        //             }
+        //         }
+        //     }
+        // }
         stage('Docker Push to ACR') {
             steps {
                 script {
